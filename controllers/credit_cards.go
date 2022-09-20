@@ -9,12 +9,8 @@ import (
 
 type CreateCreditCardInput struct {
 	Number string `json:"number" binding:"required"`
-	UserID uint   `json:"userId"`
+	UserID *uint  `json:"userId"`
 }
-
-// type UpdateUserInput struct {
-// 	Name string `json:"name" binding:"required"`
-// }
 
 func FindCreditCards(c *gin.Context) {
 	var creditCards []models.CreditCard

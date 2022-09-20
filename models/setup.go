@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var DB *gorm.DB
@@ -22,4 +23,17 @@ func SetupDB() *gorm.DB {
 	}
 	DB = db
 	return db
+}
+
+func MigrateDB(db *gorm.DB) {
+	db.AutoMigrate(Task{})
+
+	db.AutoMigrate(User{})
+
+	db.AutoMigrate(CreditCard{})
+	db.Model(CreditCard{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
+
+	db.AutoMigrate(Figure{})
+	db.AutoMigrate(Square{})
+	db.AutoMigrate(Triangle{})
 }

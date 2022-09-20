@@ -8,11 +8,15 @@ import (
 )
 
 type CreateUserInput struct {
-	Name string `json:"name" binding:"required"`
+	Name      string `json:"name" binding:"required"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
 type UpdateUserInput struct {
-	Name string `json:"name" binding:"required"`
+	Name      string `json:"name" binding:"required"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
 }
 
 // GET /users
@@ -51,7 +55,7 @@ func FindUser(c *gin.Context) { // Get model if exist
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": user})
+	c.JSON(http.StatusOK, gin.H{"data": user.FullName()})
 }
 
 // PATCH /users/:id
