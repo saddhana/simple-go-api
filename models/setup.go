@@ -3,8 +3,8 @@ package models
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
@@ -17,7 +17,7 @@ func SetupDB() *gorm.DB {
 	PORT := "3306"
 	DBNAME := "test"
 	URL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", USER, PASS, HOST, PORT, DBNAME)
-	db, err := gorm.Open("mysql", URL)
+	db, err := gorm.Open(mysql.Open(URL), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
@@ -27,12 +27,8 @@ func SetupDB() *gorm.DB {
 
 func MigrateDB(db *gorm.DB) {
 	db.AutoMigrate(Task{})
-
 	db.AutoMigrate(User{})
-
 	db.AutoMigrate(CreditCard{})
-	db.Model(CreditCard{}).AddForeignKey("user_id", "users(id)", "RESTRICT", "RESTRICT")
-
 	db.AutoMigrate(Figure{})
 	db.AutoMigrate(Square{})
 	db.AutoMigrate(Triangle{})

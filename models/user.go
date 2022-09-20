@@ -1,7 +1,9 @@
 package models
 
 import (
-	"github.com/jinzhu/gorm"
+	"fmt"
+
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -10,6 +12,14 @@ type User struct {
 	FirstName   string
 	LastName    string
 	CreditCards []CreditCard
+}
+
+func (user *User) BeforeCreate(tx *gorm.DB) (err error) {
+	if user.Name == "" {
+		tx.Statement.SetColumn("Name", user.FullName())
+		fmt.Println(">>>>  it's work and firing....")
+	}
+	return
 }
 
 func (user User) FullName() string {
